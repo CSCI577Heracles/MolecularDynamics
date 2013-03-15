@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 FRAME_RATE = 10
 DELTA_T = 0.01
-NUM_TIMESTEPS = 40
+NUM_TIMESTEPS = 2000
 
 
 def circle( xy, radius, color="lightsteelblue", facecolor="green", alpha=.6, ax=None ):
@@ -23,7 +23,7 @@ def circle( xy, radius, color="lightsteelblue", facecolor="green", alpha=.6, ax=
     e.set_facecolor( facecolor )
     e.set_alpha( alpha )
 
-c = ContainerInitializer.ContainerInitializer("tri_lattice").getContainer()
+c = ContainerInitializer.ContainerInitializer("square_lattice").getContainer()
 f = Force.Force(c)
 i = Integrator.Integrator(DELTA_T, f)
 
@@ -36,8 +36,8 @@ count = 0
 plt.figure(1)
 plt.clf()
 plt.ion()
-plt.xlim((0, 10))
-plt.ylim((0, 10))
+plt.xlim((0, c.Lx))
+plt.ylim((0, c.Ly))
 plt.grid()
 ax = plt.gca()
 plt.show()
@@ -91,7 +91,7 @@ plt.plot(time, pe_list)
 plt.ylabel('Potential Energy')
 plt.title('Potential Energy Plot')
 plt.xlabel('Time Units')
-#plt.savefig('tri_lattice_pe.png')
+plt.savefig('sq_lattice_pe.png')
 plt.show(block=True)
 
 
@@ -104,6 +104,7 @@ plt.title('Kinetic Energy Plot')
 plt.show(block=True)
 
 
+# pressure plot
 #plt.figure(2)
 plt.clf()
 plt.plot(time, pressure_list)

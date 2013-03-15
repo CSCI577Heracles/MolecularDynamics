@@ -67,8 +67,8 @@ class ContainerInitializer(object):
 
         elif init_string == 'square_lattice':
             N = 8             # Particles per row
-            Lx = 9.
-            Ly = Lx
+            Lx = 8.
+            Ly = sqrt(3) / 2. * Lx
             #c.Ly = c.Lx       # Extents determined by Lx input
             # TODO: set L
             #c.L = Vector_3D(30., 30., 0.)
