@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 FRAME_RATE = 10
 DELTA_T = 0.01
-NUM_TIMESTEPS = 1000
+NUM_TIMESTEPS = 4000
 
 def circle( xy, radius, color="lightsteelblue", facecolor="green", alpha=.6, ax=None ):
 
@@ -22,7 +22,7 @@ def circle( xy, radius, color="lightsteelblue", facecolor="green", alpha=.6, ax=
     e.set_facecolor( facecolor )
     e.set_alpha( alpha )
 
-c = ContainerInitializer.ContainerInitializer("two").getContainer()
+c = ContainerInitializer.ContainerInitializer("tri_lattice").getContainer()
 f = Force.Force(c)
 i = Integrator.Integrator(DELTA_T, f)
 
@@ -69,7 +69,7 @@ while count < NUM_TIMESTEPS:
 
     count += 1
 
-time = np.linspace(0, 100, NUM_TIMESTEPS)
+time = np.linspace(0, NUM_TIMESTEPS*DELTA_T, NUM_TIMESTEPS)
 
 #print "time:"
 #print time
@@ -86,5 +86,6 @@ plt.plot(time, pe_list)
 plt.xlabel('Timesteps')
 plt.ylabel('Potential Energy')
 plt.title('Potential Energy Plot')
+plt.savefig('tri_lattice.png')
 plt.show(block=True)
 
