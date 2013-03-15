@@ -28,6 +28,8 @@ i = Integrator.Integrator(DELTA_T, f)
 
 state_list = []
 pe_list = []
+ke_list = []
+pressure_list = []
 count = 0
 
 plt.figure(1)
@@ -43,6 +45,8 @@ while count < NUM_TIMESTEPS:
     #print "--------- BEGIN TIMESTEP " + str(count) + " --------------"
     i.integrate()
     pe_list.append(f.pe())
+    ke_list.append(f.ke())
+    pressure_list.append(f.pressure())
     #print "AX TIMESTEP " + str(count)
     #print c.ax
 
@@ -82,10 +86,21 @@ time = np.linspace(0, NUM_TIMESTEPS*DELTA_T, NUM_TIMESTEPS)
 
 # Plot Potential Energy
 plt.clf()
-plt.plot(time, pe_list)
+#plt.plot(time, pe_list)
+plt.plot(time, ke_list)
 plt.xlabel('Timesteps')
-plt.ylabel('Potential Energy')
-plt.title('Potential Energy Plot')
-plt.savefig('tri_lattice.png')
+plt.ylabel('Kinetic Energy')
+plt.title('Kinetic Energy Plot')
+#plt.ylabel('Potential Energy')
+#plt.title('Potential Energy Plot')
+#plt.savefig('tri_lattice.png')
 plt.show(block=True)
+
+plt.figure(2)
+plt.plot(time, pressure_list)
+plt.xlabel('Timesteps')
+plt.ylabel('Pressure Relation')
+plt.title('Pressure Relationship Plot')
+plt.show(block=True)
+
 

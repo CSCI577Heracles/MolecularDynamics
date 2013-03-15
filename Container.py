@@ -86,6 +86,6 @@ class Container(object):
         dz[dz < -self.Lz / 2.] += self.Lz
         return dz
 
-    def dr(self):
-        # TODO: return dr here
-        pass
+    def dr2(self):
+    	r_mag = self.dx() ** 2 + self.dy() ** 2 + self.dz() ** 2
+        return np.nan_to_num(r_mag)
