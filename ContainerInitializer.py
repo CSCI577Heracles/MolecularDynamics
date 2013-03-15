@@ -2,6 +2,7 @@ import numpy as np
 import Container
 from math import sqrt
 import math
+import random
 
 class ContainerInitializer(object):
 
@@ -103,6 +104,27 @@ class ContainerInitializer(object):
                     else:
                         #c.addParticle(xs[j],y[i],0,0,0,0,1)
                         c.add_particle(xs[j], y[i], 0., 0., 0., 0.)
+
+        elif init_string == 'prob3':
+            N = 64
+            #Lx = 8.
+            #Ly = sqrt(3) / 2. * Lx
+            Lx = 15.
+            Ly = 15.
+            c.Lx = Lx
+            c.Ly = Ly
+            c.Lz = 0.
+
+            for i in range(N):
+                x = np.random.random_sample() * Lx
+                y = np.random.random_sample()*Ly
+                print "x: " + str(x)
+                print "y: " + str(y)
+
+                c.add_particle(x, y, 0., 0., 0., 0.)
+                print c.x
+                print c.y
+
         self.c = c
 
 

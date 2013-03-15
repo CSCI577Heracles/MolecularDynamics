@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 FRAME_RATE = 10
 DELTA_T = 0.01
-NUM_TIMESTEPS = 2000
+NUM_TIMESTEPS = 500
 
 
 def circle( xy, radius, color="lightsteelblue", facecolor="green", alpha=.6, ax=None ):
@@ -23,7 +23,7 @@ def circle( xy, radius, color="lightsteelblue", facecolor="green", alpha=.6, ax=
     e.set_facecolor( facecolor )
     e.set_alpha( alpha )
 
-c = ContainerInitializer.ContainerInitializer("square_lattice").getContainer()
+c = ContainerInitializer.ContainerInitializer("prob3").getContainer()
 f = Force.Force(c)
 i = Integrator.Integrator(DELTA_T, f)
 
@@ -56,11 +56,17 @@ while count < NUM_TIMESTEPS:
 
     #plt.plot(c.x, c.y)
     #plt.show()
+
+    c.Lx -= 0.01
+    c.Ly -= 0.01
+
     if count % FRAME_RATE == 0:
         #print "c.x"
         #print c.x
         #print "c.y"
         #print c.y
+
+
         for particle in range(c.x.size):
             part_x = 0.
             part_y = 0.
@@ -91,7 +97,7 @@ plt.plot(time, pe_list)
 plt.ylabel('Potential Energy')
 plt.title('Potential Energy Plot')
 plt.xlabel('Time Units')
-plt.savefig('sq_lattice_pe.png')
+plt.savefig('prob3_pe.png')
 plt.show(block=True)
 
 
@@ -101,6 +107,7 @@ plt.plot(time, ke_list)
 plt.xlabel('Time Units')
 plt.ylabel('Kinetic Energy')
 plt.title('Kinetic Energy Plot')
+plt.savefig('prob3_ke.png')
 plt.show(block=True)
 
 
@@ -111,6 +118,7 @@ plt.plot(time, pressure_list)
 plt.xlabel('Time Units')
 plt.ylabel('Pressure Relation')
 plt.title('Pressure Relationship Plot')
+plt.savefig('prob3_pressure.png')
 plt.show(block=True)
 
 
