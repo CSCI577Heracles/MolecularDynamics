@@ -8,8 +8,23 @@ class Force(object):
         self.c = c
 
     def pe(self):
-        # TODO: return potential energy
-        pass
+        eps = 1.
+        sig = 1.
+
+        dx = self.c.dx()
+        dy = self.c.dy()
+        dz = self.c.dz()
+        dr = self.c.dr()
+
+        r_mag = (dx ** 2 + dy ** 2 + dz ** 2)
+        r_mag = np.nan_to_num(r_mag)
+
+        rgBuild = (4 * eps) * ((2 * (sig**12 / r_mag**6)) - (sig**6 / r_mag**3))
+        rgBuild = np.nan_to_num(rgBuild)
+        #print "rgBuild:"
+        #print np.sum(rgBuild)
+        #print "-------------------"
+        return np.sum(rgBuild)
 
     def ke(self):
         # TODO: return kinetic energy

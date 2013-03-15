@@ -7,7 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 FRAME_RATE = 10
-
+DELTA_T = 0.01
+NUM_TIMESTEPS = 1000
 
 def circle( xy, radius, color="lightsteelblue", facecolor="green", alpha=.6, ax=None ):
 
@@ -21,11 +22,12 @@ def circle( xy, radius, color="lightsteelblue", facecolor="green", alpha=.6, ax=
     e.set_facecolor( facecolor )
     e.set_alpha( alpha )
 
-c = ContainerInitializer.ContainerInitializer("tri_lattice").getContainer()
+c = ContainerInitializer.ContainerInitializer("two").getContainer()
 f = Force.Force(c)
-i = Integrator.Integrator(0.01, f)
+i = Integrator.Integrator(DELTA_T, f)
 
 state_list = []
+pe_list = []
 count = 0
 
 plt.figure(1)
@@ -37,9 +39,10 @@ plt.grid()
 ax = plt.gca()
 plt.show()
 
-while count < 4000:
+while count < NUM_TIMESTEPS:
     #print "--------- BEGIN TIMESTEP " + str(count) + " --------------"
     i.integrate()
+    pe_list.append(f.pe())
     #print "AX TIMESTEP " + str(count)
     #print c.ax
 
@@ -66,4 +69,22 @@ while count < 4000:
 
     count += 1
 
+time = np.linspace(0, 100, NUM_TIMESTEPS)
+
+#print "time:"
+#print time
+#print "---------"
+#print "pe_list:"
+
+#print "len time: " + str(len(time))
+#print "len pe_list " + str(len(pe_list))
+#print pe_list
+
+# Plot Potential Energy
+plt.clf()
+plt.plot(time, pe_list)
+plt.xlabel('Timesteps')
+plt.ylabel('Potential Energy')
+plt.title('Potential Energy Plot')
+plt.show(block=True)
 
