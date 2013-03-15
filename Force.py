@@ -27,19 +27,19 @@ class Force(object):
         return np.sum(rgBuild)
 
     def ke(self):
-		d = 2.
-		N = np.size(self.c.x())		
-		
-		vx = self.c.vx()
-		vy = self.c.vy()
-		vz = self.c.vz()
-		return 1 / ((N - 1) * d) * sum(vx ** 2 + vy ** 2 + vz ** 2)
+        d = 2.
+        N = np.size(self.c.x)
+        vx = self.c.vx.copy()
+        vy = self.c.vy.copy()
+        vz = self.c.vz.copy()
+        return 1 / ((N - 1) * d) * sum(vx ** 2 + vy ** 2 + vz ** 2)
 
     def pressure(self):
-    	eps = 1.
-    	sig = 1.
+        ps = 1.
+        sig = 1.
+        eps = 1.
         d = 2.
-        N = np.size(self.c.x())
+        N = np.size(self.c.x)
         
         dx = self.c.dx()
         dy = self.c.dy()
@@ -51,19 +51,15 @@ class Force(object):
         
         px = dx * (24 * eps / r_mag) * ((2 * (sig**12 / r_mag**6)) - (sig**6 / r_mag**3))
         px = np.nan_to_num(px)
-        px = triu(px)
-		
-		py = dy * (24 * eps / r_mag) * ((2 * (sig**12 / r_mag**6)) - (sig**6 / r_mag**3))
-		py = np.nan_to_num(py)
-		py = triu(py)
-		
-		pz = dz * (24 * eps / r_mag) * ((2 * (sig**12 / r_mag**6)) - (sig**6 / r_mag**3))
-		pz = np.nan_to_num(pz)
-		pz = triu(pz)
-		
-		pt = px + py + pz
-		
-		return 1 / (d * N * self.ke()) * sum(pt)
+        px = np.triu(px)
+        py = dy * (24 * eps / r_mag) * ((2 * (sig**12 / r_mag**6)) - (sig**6 / r_mag**3))
+        py = np.nan_to_num(py)
+        py = np.triu(py)
+        pz = dz * (24 * eps / r_mag) * ((2 * (sig**12 / r_mag**6)) - (sig**6 / r_mag**3))
+        pz = np.nan_to_num(pz)
+        pz = np.triu(pz)
+        pt = px + py + pz
+        return 1 / (d * N * self.ke()) * np.sum(pt)
 
     def ax(self):
         eps = 1.0

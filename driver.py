@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 
 FRAME_RATE = 10
 DELTA_T = 0.01
-NUM_TIMESTEPS = 4000
+NUM_TIMESTEPS = 40
+
 
 def circle( xy, radius, color="lightsteelblue", facecolor="green", alpha=.6, ax=None ):
 
@@ -86,19 +87,27 @@ time = np.linspace(0, NUM_TIMESTEPS*DELTA_T, NUM_TIMESTEPS)
 
 # Plot Potential Energy
 plt.clf()
-#plt.plot(time, pe_list)
-plt.plot(time, ke_list)
-plt.xlabel('Timesteps')
-plt.ylabel('Kinetic Energy')
-plt.title('Kinetic Energy Plot')
-#plt.ylabel('Potential Energy')
-#plt.title('Potential Energy Plot')
-#plt.savefig('tri_lattice.png')
+plt.plot(time, pe_list)
+plt.ylabel('Potential Energy')
+plt.title('Potential Energy Plot')
+plt.xlabel('Time Units')
+#plt.savefig('tri_lattice_pe.png')
 plt.show(block=True)
 
-plt.figure(2)
+
+# ke plot
+plt.clf()
+plt.plot(time, ke_list)
+plt.xlabel('Time Units')
+plt.ylabel('Kinetic Energy')
+plt.title('Kinetic Energy Plot')
+plt.show(block=True)
+
+
+#plt.figure(2)
+plt.clf()
 plt.plot(time, pressure_list)
-plt.xlabel('Timesteps')
+plt.xlabel('Time Units')
 plt.ylabel('Pressure Relation')
 plt.title('Pressure Relationship Plot')
 plt.show(block=True)
