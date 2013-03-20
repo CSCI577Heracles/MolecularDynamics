@@ -65,7 +65,7 @@ class Container(object):
         xtemp = np.tile(self.x, (self.x.size,1))
         #print "xtemp"
         #print xtemp
-        dx = xtemp - xtemp.T
+        dx = xtemp.T - xtemp
         dx[dx > self.Lx / 2.] -= self.Lx
         dx[dx < -self.Lx / 2.] += self.Lx
         #print "dx"
@@ -74,14 +74,14 @@ class Container(object):
 
     def dy(self):
         ytemp = np.tile(self.y, (self.y.size, 1))
-        dy = ytemp - ytemp.T
+        dy = ytemp.T - ytemp
         dy[dy > self.Ly / 2.] -= self.Ly
         dy[dy < -self.Ly / 2.] += self.Ly
         return dy
 
     def dz(self):
         ztemp = np.tile(self.z, (self.z.size, 1))
-        dz = ztemp - ztemp.T
+        dz = ztemp.T - ztemp
         dz[dz > self.Lz / 2.] -= self.Lz
         dz[dz < -self.Lz / 2.] += self.Lz
         return dz

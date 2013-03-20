@@ -124,6 +124,37 @@ class ContainerInitializer(object):
                 c.add_particle(x, y, 0., 0., 0., 0.)
                 print c.x
                 print c.y
+                
+        elif init_string == 'proj1':
+        	cFloor = 100
+        	cSled = 13
+        	a = 2 ** (1 / 6)
+        	Lx = 100 * a
+        	Ly = 20 * a
+        	c.Lx = Lx
+        	c.Ly = Ly
+        	c.Lz = 0.
+        	
+        	# set up floor values
+        	xFloor = np.linspace(a / 2, Lx - a / 2, cFloor)
+        	yFloor = 1.
+        	
+        	# set up the bottom of the sled
+        	xSledBot = np.linspace(a, (2 * np.ceil(cSled) - 1) * a, np.ceil(cSled))
+        	ySledBot = 1 + a
+        	
+        	# set up the top of the sled
+        	xSledTop = np.linspace(2 * a, 2 * np.floor(cSled) * a, np.floor(cSled))
+        	ySledTop = 1 + a + np.sqrt(3) * a    	
+        	
+        	for i in range(cFloor):
+        		c.add_particle(xFloor[i], yFloor, 0., 0., 0., 0., 1.)
+        	
+        	for i in range(cSled):
+        		if i % 2:
+        			c.add_particle(xSledTop[(i - 1)/2], ySledTop, 0., 0., 0., 0.)
+        		else:
+        			c.add_particle(xSledBot[i / 2], ySledBot, 0., 0., 0., 0.)
 
         self.c = c
 

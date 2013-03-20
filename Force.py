@@ -1,6 +1,9 @@
 import numpy as np
 import math
 
+XAXIS = 1
+YAXIS = 2
+ZAXIS = 3
 
 class Force(object):
 
@@ -61,7 +64,7 @@ class Force(object):
         pt = px + py + pz
         return 1 / (d * N * self.ke()) * np.sum(pt)
 
-    def ax(self):
+    def aLJ(self, axis):
         eps = 1.0
         sig = 1.0
         dx = self.c.dx()
@@ -71,77 +74,55 @@ class Force(object):
 
         r_mag = np.sqrt(dx ** 2 + dy ** 2 + dz ** 2)
         r_mag = np.nan_to_num(r_mag)
-        x_hat = dx / r_mag
-        x_hat = np.nan_to_num(x_hat)
+        
+        if axis == XAXIS:
+        	dvar = dx
+        elif axis == YAXIS:
+        	dvar = dy
+        elif axis == ZAXIS:
+        	dvar = dz
+        dvar = np.nan_to_num(dvar)
 
-        #print "r_mag"
-        #print r_mag
+		avar = dvar * (24 * eps) / dr2 * (2 * (sig ** 12 / dr2 ** 6) - (sig ** 6 / dr2 ** 3))
+        avar = np.nan_to_num(avar)
 
-        #print "x_hat"
-        #print x_hat
+        return np.sum(avar, axis=1) # still need to divide by mass here
 
-        ax = ((24 * eps) / r_mag * (2 * (sig / r_mag) ** 12 - (sig / r_mag) ** 6)) * x_hat
-        ax = np.nan_to_num(ax)
+	# This force is only in the x - direction
+	def aX(self, t):
+		p = self.c.p[-1] 
 
-        ax = -ax
-        #force = r_hat * (24*eps)/r_mag * (2*(sig/r_mag)**12 - (sig/r_mag)**6)
-        #print "ax: "
-        #print np.sum(ax, axis=1)
-        return np.sum(ax, axis=1)
+        return 100 * (0.1 * t - (p.x - self.c.xInit)) # still need to divide by mass here
+        
+    # acceleration due to damping force
+    def aD(self, axis):
+    	
+    	x = self.c.x[self.c.cFloor] 
+    	y = self.c.y[self.c.cFloor]
+    	z = self.c.z[self.c.cFloor]
+    	if axis == XAXIS:
+        	var = x
+        	vvar = self.c.vx[self.c.cFloor]
+        elif axis == YAXIS:
+        	var = y 
+        	vvar = self.c.vy[self.c.cFloor]
+        elif axis == ZAXIS:
+        	var = z
+        	vvar = self.c.vz[self.c.cFloor]
+        dr = sqrt(x ** 2 + y ** 2 + z ** 2)
 
-    def ay(self):
-        eps = 1.0
-        sig = 1.0
-        dx = self.c.dx()
-        dy = self.c.dy()
-        dz = self.c.dz()
-        dr2 = self.c.dr2()
-
-        r_mag = np.sqrt(dx ** 2 + dy ** 2 + dz ** 2)
-        r_mag = np.nan_to_num(r_mag)
-        y_hat = dy / r_mag
-        y_hat = np.nan_to_num(y_hat)
-
-        #print "r_mag"
-        #print r_mag
-
-        #print "y_hat"
-        #print y_hat
-
-        ay = y_hat * ((24 * eps) / r_mag * (2 * (sig / r_mag) ** 12 - (sig / r_mag) ** 6))
-        ay = np.nan_to_num(ay)
-
-        ay = -ay
-
-        #force = r_hat * (24*eps)/r_mag * (2*(sig/r_mag)**12 - (sig/r_mag)**6)
-        #print "ay: "
-        #print np.sum(ay, axis=1)
-        return np.sum(ay, axis=1)
-
-    def az(self):
-        eps = 1.0
-        sig = 1.0
-        dx = self.c.dx()
-        dy = self.c.dy()
-        dz = self.c.dz()
-        dr2 = self.c.dr2()
-
-        r_mag = np.sqrt(dx ** 2 + dy ** 2 + dz ** 2)
-        r_mag = np.nan_to_num(r_mag)
-        z_hat = dz / r_mag
-        z_hat = np.nan_to_num(z_hat)
-
-        #print "r_mag"
-        #print r_mag
-
-        #print "z_hat"
-        #print z_hat
-
-        az = z_hat * ((24 * eps) / r_mag * (2 * (sig / r_mag) ** 12 - (sig / r_mag) ** 6))
-        az = np.nan_to_num(az)
-
-        az = -az
-        #force = r_hat * (24*eps)/r_mag * (2*(sig/r_mag)**12 - (sig/r_mag)**6)
-        #print "az: "
-        #print np.sum(az, axis=1)
-        return np.sum(az, axis=1)
+        return -10. * vvar * var / dr # still need to divide by mass here
+        
+    # acceleration due to spring force
+    def aS(self, axis, a=2 ** (1 / 6.)):
+    	if axis == XAXIS:
+        	tempa = (self.c.d_sled(XAXIS) - self.c.xspringMatrix) * -500
+        	tempa = tempa * self.c.sledMatrix
+        elif axis == YAXIS:
+        	tempa = self.c.d_sled(YAXIS) - self.c.xspringMatrix) * -500
+        	tempa = tempa * self.c.sledMatrix
+        elif axis == ZAXIS:
+        	tempa = self.c.d_sled(ZAXIS) - self.c.xspringMatrix) * -500
+        	tempa = tempa * self.c.sledMatrix
+        	
+        return np.sum(tempa, axis=1) / self.c.m[self.c.cFloor:] # this assumes a mass matrix exists
