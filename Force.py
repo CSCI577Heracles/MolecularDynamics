@@ -86,13 +86,13 @@ class Force(object):
 		avar = dvar * (24 * eps) / dr2 * (2 * (sig ** 12 / dr2 ** 6) - (sig ** 6 / dr2 ** 3))
         avar = np.nan_to_num(avar)
 
-        return np.sum(avar, axis=1) # still need to divide by mass here
+        return np.sum(avar, axis=1) / self.c.m 
 
 	# This force is only in the x - direction
 	def aX(self, t):
 		p = self.c.p[-1] 
 
-        return 100 * (0.1 * t - (p.x - self.c.xInit)) # still need to divide by mass here
+        return 100 * (0.1 * t - (p.x - self.c.xInit)) / self.c.m[-1]
         
     # acceleration due to damping force
     def aD(self, axis):
@@ -111,7 +111,7 @@ class Force(object):
         	vvar = self.c.vz[self.c.cFloor]
         dr = sqrt(x ** 2 + y ** 2 + z ** 2)
 
-        return -10. * vvar * var / dr # still need to divide by mass here
+        return -10. * vvar * var / (dr * self.c.m[self.c.cFloor])
         
     # acceleration due to spring force
     def aS(self, axis, a=2 ** (1 / 6.)):
@@ -125,4 +125,4 @@ class Force(object):
         	tempa = self.c.d_sled(ZAXIS) - self.c.xspringMatrix) * -500
         	tempa = tempa * self.c.sledMatrix
         	
-        return np.sum(tempa, axis=1) / self.c.m[self.c.cFloor:] # this assumes a mass matrix exists
+        return np.sum(tempa, axis=1) / self.c.m[self.c.cFloor:] 
